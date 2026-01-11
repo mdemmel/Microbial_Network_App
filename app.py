@@ -27,6 +27,17 @@ palette = {
     "Algae": "#6a994e",
 }
 
+#------ HELPER------#
+def safe_float(x):
+    try:
+        # If it's a list/array with one element, take that element
+        if isinstance(x, (list, np.ndarray)):
+            x = x[0]
+        return float(x)
+    except Exception:
+        return 0.0
+
+
 # ---------- FIXED LAYOUT ----------
 def compute_layout(graphs):
     G_all = nx.DiGraph()
@@ -62,9 +73,10 @@ node_sizes = np.interp(out_deg, (out_deg.min(), out_deg.max()), (200, 1200))
 
 # Edge weights
 weights = np.array([
-    float(d.get("weight", 0))
+    safe_float(d.get("weight", 0))
     for _, _, d in G.edges(data=True)
 ])
+
 
 alphas = np.interp(np.abs(weights), (np.abs(weights).min(), np.abs(weights).max()), (0.2, 1.0))
 widths = np.interp(np.abs(weights), (np.abs(weights).min(), np.abs(weights).max()), (0.5, 3))
