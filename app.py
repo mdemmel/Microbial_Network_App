@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 
 # ---------- LOAD DATA ----------
-@st.cache_data
 def load_data():
     info = pd.read_csv("data/UCSD-P1_node_info_cleaned.csv")
     graphs = np.load("data/graphs_by_time_UCSD-P1.npy", allow_pickle=True).item()
@@ -29,7 +28,6 @@ palette = {
 }
 
 # ---------- FIXED LAYOUT ----------
-@st.cache_data
 def compute_layout(graphs):
     G_all = nx.DiGraph()
     for G in graphs.values():
