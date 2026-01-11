@@ -9,13 +9,20 @@ import time
 # -----------------------------
 # 1️⃣ Load data safely
 # -----------------------------
-@st.cache_data
+#@st.cache_data
 def load_data():
     info = pd.read_csv("data/UCSD-P1_node_info_cleaned.csv")
     graphs_by_time = np.load("data/graphs_by_time_UCSD-P1.npy", allow_pickle=True).item()
     return info, graphs_by_time
 
 info, graphs_by_time = load_data()
+
+
+# rename Prod_over_time to Algae
+# Replace node name 'Prod_over_time' with 'Algae' in all graphs
+for G in graphs_by_time.values():
+    if "Prod_over_time" in G.nodes:
+        nx.relabel_nodes(G, {"Prod_over_time": "Algae"}, copy=False)
 
 # -----------------------------
 # 2️⃣ Node color palette
@@ -61,7 +68,7 @@ st.title("Microbial Network Evolution")
 
 # Animation controls
 play = st.button("Play Animation")
-speed = st.slider("Animation speed (seconds per frame)", 0.1, 2.0, 0.6)
+speed = st.slider("Animation speed (seconds per frame)", 0.01, 1.0, 0.05, 0.01)
 manual_time = st.slider(
     "Select time step manually", 
     min_value=min(graphs_by_time.keys()),
